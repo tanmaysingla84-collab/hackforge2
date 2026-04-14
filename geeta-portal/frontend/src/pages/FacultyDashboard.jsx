@@ -19,6 +19,7 @@ const FacultyDashboard = () => {
   const [editedMarks, setEditedMarks] = useState({});
   const [editedAttendance, setEditedAttendance] = useState({});
   const [directMessage, setDirectMessage] = useState({});
+  const [messageTarget, setMessageTarget] = useState({});
   const [saving, setSaving] = useState(false);
   const [messaging, setMessaging] = useState(false);
 
@@ -100,8 +101,14 @@ const FacultyDashboard = () => {
     if (!text || text.trim() === '') return;
     setMessaging(true);
     try {
-      await apiClient.sendMessage(selectedStudentId, 'teacher', `[${courseCode}] ${text}`);
-      toast.success('Direct Warning/Message safely deployed to student portals!');
+      const target = messageTarget[courseCode] || 'ALL';
+      if (target === 'ALL') {
+        const promises = students.map(s => apiClient.sendMessage(s.id, 'teacher', `[${courseCode}] ${text}`));
+        await Promise.all(promises);
+      } else {
+        await apiClient.sendMessage(target, 'teacher', `[${courseCode}] ${text}`);
+      }
+      toast.success('Successfully deployed message to routing queue!');
       setDirectMessage(prev => ({ ...prev, [courseCode]: '' }));
     } catch (e) {
       toast.error('Failed to route direct message');
@@ -179,10 +186,22 @@ const FacultyDashboard = () => {
               >
                 <User size={18} /> Targeted Student Editing
               </button>
+              
+              <button 
+                onClick={() => setViewMode('communications')}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer',
+                  border: 'none', fontWeight: 600, transition: 'all 0.2s',
+                  background: viewMode === 'communications' ? '#FAF5FF' : 'transparent',
+                  color: viewMode === 'communications' ? '#9333EA' : 'var(--color-text-light)'
+                }}
+              >
+                <MessageSquare size={18} /> Communications Hub
+              </button>
             </div>
 
             <div style={{ paddingTop: '24px' }}>
-              {viewMode === 'aggregate' ? (
+              {viewMode === 'aggregate' && (
                 // --- AGGREGATE VIEW ---
                 <div className="animate-fade-in">
                   <h3 style={{ marginBottom: '16px', color: '#16A34A' }}>Class Averages Across Your Subjects</h3>
@@ -190,13 +209,15 @@ const FacultyDashboard = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
                     {authorizedCourses.map(ac => {
                       // Compute Average
-                      let totalA1=0, totalA2=0, totalMid=0, totalEnd=0, totalAtt=0, attendees=0;
+                      let totalA1=0, totalA2=0, totalA3=0, totalA4=0, totalMid=0, totalEnd=0, totalAtt=0, attendees=0;
                       
                       students.forEach(s => {
                         const course = s.theoryCourses.find(c => c.code === ac.code);
                         if (course) {
                           totalA1 += course.a1 || 0;
                           totalA2 += course.a2 || 0;
+                          totalA3 += course.a3 || 0;
+                          totalA4 += course.a4 || 0;
                           totalMid += course.mid || 0;
                           totalEnd += course.end || 0;
                           totalAtt += s.attendance[ac.code] || 0;
@@ -208,17 +229,28 @@ const FacultyDashboard = () => {
                         <div key={ac.code} className="card glass-panel" style={{ borderLeft: '4px solid #16A34A' }}>
                            <h4 style={{ margin: '0 0 16px 0', color: 'var(--color-text)' }}>{ac.code} - {ac.name}</h4>
                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                               <span className="text-muted">A1 Average (25)</span>
-                               <span style={{ fontWeight: 600 }}>{(totalA1/attendees).toFixed(1)}</span>
+                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', background: '#F8FAFC', padding: '6px', borderRadius: '4px' }}>
+                                 <span className="text-muted">A1</span><span style={{ fontWeight: 600 }}>{(totalA1/attendees).toFixed(1)}</span>
+                               </div>
+                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', background: '#F8FAFC', padding: '6px', borderRadius: '4px' }}>
+                                 <span className="text-muted">A2</span><span style={{ fontWeight: 600 }}>{(totalA2/attendees).toFixed(1)}</span>
+                               </div>
+                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', background: '#F8FAFC', padding: '6px', borderRadius: '4px' }}>
+                                 <span className="text-muted">A3</span><span style={{ fontWeight: 600 }}>{(totalA3/attendees).toFixed(1)}</span>
+                               </div>
+                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', background: '#F8FAFC', padding: '6px', borderRadius: '4px' }}>
+                                 <span className="text-muted">A4</span><span style={{ fontWeight: 600 }}>{(totalA4/attendees).toFixed(1)}</span>
+                               </div>
                              </div>
-                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                               <span className="text-muted">A2 Average (25)</span>
-                               <span style={{ fontWeight: 600 }}>{(totalA2/attendees).toFixed(1)}</span>
-                             </div>
-                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                             
+                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', borderTop: '1px solid var(--border-color)', paddingTop: '8px' }}>
                                <span className="text-muted">Mid Exams (60)</span>
                                <span style={{ fontWeight: 600 }}>{(totalMid/attendees).toFixed(1)}</span>
+                             </div>
+                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                               <span className="text-muted">End Exams (100)</span>
+                               <span style={{ fontWeight: 600 }}>{(totalEnd/attendees).toFixed(1)}</span>
                              </div>
                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', borderTop: '1px dashed var(--border-color)', paddingTop: '8px' }}>
                                <span className="text-muted">Daily Attendance</span>
@@ -230,7 +262,9 @@ const FacultyDashboard = () => {
                     })}
                   </div>
                 </div>
-              ) : (
+              )}
+              
+              {viewMode === 'specific' && (
                 // --- TARGETED STUDENT VIEW ---
                 <div className="animate-fade-in">
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
@@ -316,33 +350,64 @@ const FacultyDashboard = () => {
                                   </button>
                                 </div>
                             </div>
-                            
-                            {/* MESSAGING TERMINAL */}
-                            <div style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-                              <MessageSquare size={20} color="var(--color-text-light)" />
-                              <input 
-                                type="text"
-                                value={directMessage[ac.code] || ''}
-                                onChange={e => setDirectMessage(prev => ({ ...prev, [ac.code]: e.target.value }))}
-                                placeholder="Issue academic warning or note directly to their portal..."
-                                className="input-group"
-                                style={{ flex: 1, margin: 0, padding: '10px 16px', background: '#F8FAFC', border: '1px solid var(--border-color)', borderRadius: '100px', fontSize: '14px' }}
-                              />
-                              <button 
-                                className="btn" 
-                                onClick={() => sendDirectMessage(ac.code)}
-                                disabled={messaging || !directMessage[ac.code]}
-                                style={{ background: '#0F172A', color: 'white', padding: '10px 24px', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '6px' }}
-                              >
-                                {messaging ? <RefreshCw size={16} className="animate-spin" /> : <Send size={16} />} Dispatch
-                              </button>
-                            </div>
-
                           </div>
                         )
                       })}
                     </div>
                   )}
+                </div>
+              )}
+
+              {viewMode === 'communications' && (
+                // --- MASS COMMUNICATIONS VIEW ---
+                <div className="animate-fade-in">
+                  <h3 style={{ marginBottom: '16px', color: '#9333EA' }}>Broadcast Messages to Portals</h3>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                    {authorizedCourses.map(ac => (
+                      <div key={ac.code} className="card glass-panel" style={{ borderLeft: '4px solid #9333EA', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                         <h4 style={{ margin: '0', color: 'var(--color-text)' }}>{ac.code} - {ac.name}</h4>
+                         <p style={{ fontSize: '13px', color: 'var(--color-text-light)', margin: 0 }}>Push a formal message to student accounts enrolled in this specific subject.</p>
+                         
+                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <label style={{ fontSize: '12px', fontWeight: 600, color: '#9333EA' }}>Recipient Target</label>
+                              <select 
+                                className="input-group"
+                                value={messageTarget[ac.code] || 'ALL'} 
+                                onChange={e => setMessageTarget(prev => ({ ...prev, [ac.code]: e.target.value }))}
+                                style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #D8B4FE', background: '#FAF5FF', fontSize: '14px', margin: 0 }}
+                              >
+                                <option value="ALL">Everyone (Broadcast to Class)</option>
+                                {students.map(s => (
+                                  <option key={s.id} value={s.id}>{s.name} ({s.rollNo})</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>Message Content</label>
+                               <textarea 
+                                 value={directMessage[ac.code] || ''}
+                                 onChange={e => setDirectMessage(prev => ({ ...prev, [ac.code]: e.target.value }))}
+                                 placeholder="e.g., Assignment 3 is due tomorrow!"
+                                 style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '14px', minHeight: '80px', fontFamily: 'inherit', resize: 'vertical' }}
+                               />
+                            </div>
+                            
+                            <button 
+                              className="btn" 
+                              onClick={() => sendDirectMessage(ac.code)}
+                              disabled={messaging || !directMessage[ac.code]}
+                              style={{ background: '#9333EA', color: 'white', padding: '10px 16px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 600, marginTop: '8px' }}
+                            >
+                              {messaging ? <RefreshCw size={16} className="animate-spin" /> : <Send size={16} />} 
+                              Dispatch Message
+                            </button>
+                         </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
