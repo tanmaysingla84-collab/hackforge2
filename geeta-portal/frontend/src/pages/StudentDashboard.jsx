@@ -100,9 +100,9 @@ const StudentDashboard = () => {
           gap: '24px',
         }}>
           {/* Top Level Dash Layer */}
-          <div className="animate-fade-in stagger-2" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '24px' }}>
-            <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
+          <div className="animate-fade-in stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <TrendChart courses={student.theoryCourses} />
+            <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
           </div>
 
           <div className="animate-fade-in stagger-3">
