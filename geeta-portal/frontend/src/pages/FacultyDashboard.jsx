@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { apiClient } from '../api/client';
-import { Users, User, Save, RefreshCw } from 'lucide-react';
+import { Users, User, Save, RefreshCw, Send, MessageSquare } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const FacultyDashboard = () => {
@@ -18,7 +18,9 @@ const FacultyDashboard = () => {
   // Editable forms logic state matrix
   const [editedMarks, setEditedMarks] = useState({});
   const [editedAttendance, setEditedAttendance] = useState({});
+  const [directMessage, setDirectMessage] = useState({});
   const [saving, setSaving] = useState(false);
+  const [messaging, setMessaging] = useState(false);
 
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -90,6 +92,21 @@ const FacultyDashboard = () => {
       toast.error('Failed to commit override. Server rejected payload.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const sendDirectMessage = async (courseCode) => {
+    const text = directMessage[courseCode];
+    if (!text || text.trim() === '') return;
+    setMessaging(true);
+    try {
+      await apiClient.sendMessage(selectedStudentId, 'teacher', `[${courseCode}] ${text}`);
+      toast.success('Direct Warning/Message safely deployed to student portals!');
+      setDirectMessage(prev => ({ ...prev, [courseCode]: '' }));
+    } catch (e) {
+      toast.error('Failed to route direct message');
+    } finally {
+      setMessaging(false);
     }
   };
 
@@ -239,6 +256,8 @@ const FacultyDashboard = () => {
                         // Form Input State Overrides (if typing, show draft, else show canonical DB value)
                         const a1 = editedMarks[ac.code]?.a1 ?? (activeCourse?.a1 || 0);
                         const a2 = editedMarks[ac.code]?.a2 ?? (activeCourse?.a2 || 0);
+                        const a3 = editedMarks[ac.code]?.a3 ?? (activeCourse?.a3 || 0);
+                        const a4 = editedMarks[ac.code]?.a4 ?? (activeCourse?.a4 || 0);
                         const mid = editedMarks[ac.code]?.mid ?? (activeCourse?.mid || 0);
                         const end = editedMarks[ac.code]?.end ?? (activeCourse?.end || 0);
                         const att = editedAttendance[ac.code] ?? (activeAtt || 0);
@@ -246,50 +265,79 @@ const FacultyDashboard = () => {
                         const isEdited = !!editedMarks[ac.code] || !!editedAttendance[ac.code];
 
                         return (
-                          <div key={ac.code} className="card glass-panel" style={{ borderLeft: '4px solid #2563EB' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                          <div key={ac.code} className="card glass-panel" style={{ borderLeft: '4px solid #2563EB', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <h4 style={{ margin: 0, fontSize: '18px' }}>{ac.code} - {ac.name} <span style={{ fontSize: '12px', fontWeight: 400, color: 'var(--color-text-light)', marginLeft: '8px' }}>Editing Data strictly for {selectedStudent.name}</span></h4>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
                                 {/* MARKS FORM */}
-                                <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', background: 'var(--color-cream)', padding: '16px', borderRadius: '8px' }}>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                     <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>A1 (Max 25)</label>
-                                    <input type="number" value={a1} onChange={e => handleMarksChange(ac.code, 'a1', e.target.value)} style={{ width: '80px', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                    <input type="number" value={a1} onChange={e => handleMarksChange(ac.code, 'a1', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                     <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>A2 (Max 25)</label>
-                                    <input type="number" value={a2} onChange={e => handleMarksChange(ac.code, 'a2', e.target.value)} style={{ width: '80px', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                    <input type="number" value={a2} onChange={e => handleMarksChange(ac.code, 'a2', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                  </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>A3 (Max 25)</label>
+                                    <input type="number" value={a3} onChange={e => handleMarksChange(ac.code, 'a3', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                  </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>A4 (Max 25)</label>
+                                    <input type="number" value={a4} onChange={e => handleMarksChange(ac.code, 'a4', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                     <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>Mid (Max 60)</label>
-                                    <input type="number" value={mid} onChange={e => handleMarksChange(ac.code, 'mid', e.target.value)} style={{ width: '80px', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                    <input type="number" value={mid} onChange={e => handleMarksChange(ac.code, 'mid', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                     <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>End (Max 100)</label>
-                                    <input type="number" value={end} onChange={e => handleMarksChange(ac.code, 'end', e.target.value)} style={{ width: '80px', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
+                                    <input type="number" value={end} onChange={e => handleMarksChange(ac.code, 'end', e.target.value)} style={{ width: '100%', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px' }} />
                                   </div>
                                 </div>
 
-                                {/* ATTENDANCE FORM */}
-                                <div style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>Overall Attendance %</label>
-                                  <input type="number" value={att} onChange={e => handleAttendanceChange(ac.code, e.target.value)} style={{ width: '90px', padding: '6px', border: '1px solid var(--border-color)', borderRadius: '4px', background: '#F0F9FF', borderColor: '#BAE6FD' }} />
-                                </div>
+                                {/* ATTENDANCE & COMMIT WRAPPER */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderLeft: '1px solid var(--border-color)', paddingLeft: '24px', flex: 1 }}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-light)' }}>Overall Attendance %</label>
+                                    <input type="number" value={att} onChange={e => handleAttendanceChange(ac.code, e.target.value)} style={{ width: '120px', padding: '8px', border: '1px solid var(--border-color)', borderRadius: '4px', background: '#F0F9FF', borderColor: '#BAE6FD', fontWeight: 600 }} />
+                                  </div>
 
-                                {/* COMMIT ACTION */}
-                                <div style={{ display: 'flex', alignItems: 'flex-end', marginLeft: 'auto' }}>
                                   <button 
                                     className="btn btn-primary" 
                                     onClick={() => submitTargetEdits(ac.code)}
                                     disabled={!isEdited || saving}
-                                    style={{ display: 'flex', gap: '6px', background: isEdited ? '#2563EB' : 'var(--color-text-light)' }}
+                                    style={{ display: 'flex', gap: '6px', justifyContent: 'center', width: 'auto', alignSelf: 'flex-start', background: isEdited ? '#2563EB' : 'var(--color-text-light)' }}
                                   >
                                     <Save size={16} /> {saving ? 'Writing...' : 'Push to Database'}
                                   </button>
                                 </div>
                             </div>
+                            
+                            {/* MESSAGING TERMINAL */}
+                            <div style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                              <MessageSquare size={20} color="var(--color-text-light)" />
+                              <input 
+                                type="text"
+                                value={directMessage[ac.code] || ''}
+                                onChange={e => setDirectMessage(prev => ({ ...prev, [ac.code]: e.target.value }))}
+                                placeholder="Issue academic warning or note directly to their portal..."
+                                className="input-group"
+                                style={{ flex: 1, margin: 0, padding: '10px 16px', background: '#F8FAFC', border: '1px solid var(--border-color)', borderRadius: '100px', fontSize: '14px' }}
+                              />
+                              <button 
+                                className="btn" 
+                                onClick={() => sendDirectMessage(ac.code)}
+                                disabled={messaging || !directMessage[ac.code]}
+                                style={{ background: '#0F172A', color: 'white', padding: '10px 24px', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                              >
+                                {messaging ? <RefreshCw size={16} className="animate-spin" /> : <Send size={16} />} Dispatch
+                              </button>
+                            </div>
+
                           </div>
                         )
                       })}
