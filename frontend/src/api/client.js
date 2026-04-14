@@ -3,11 +3,10 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'https://hackforge2.onrender.co
 
 export const apiClient = {
   getStudent: async (id) => {
-    const res = await fetch(`${BASE_URL}/student/${id}`);
-    if (!res.ok) throw new Error('Student not found'); // Added basic error handling
+    const res = await fetch(`${BASE_URL}/student/${id}`); // Change {10} to {id}
+    if (!res.ok) throw new Error('Student not found');
     return res.json();
-  },
-
+},
   getAlerts: async (id) => {
     const res = await fetch(`${BASE_URL}/student/${id}/alerts`);
     return res.json();
