@@ -237,12 +237,14 @@ const FacultyDashboard = () => {
                       
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
                         {batch.courses.map(courseCode => {
-                           let totalA1=0, totalA2=0, totalMid=0, totalEnd=0, totalAtt=0, attendees=0;
+                           let totalA1=0, totalA2=0, totalA3=0, totalA4=0, totalMid=0, totalEnd=0, totalAtt=0, attendees=0;
                            batch.students.forEach(s => {
                              const courseObj = s.theoryCourses.find(c => c.code === courseCode);
                              if (courseObj) {
                                totalA1 += courseObj.a1 || 0;
                                totalA2 += courseObj.a2 || 0;
+                               totalA3 += courseObj.a3 || 0;
+                               totalA4 += courseObj.a4 || 0;
                                totalMid += courseObj.mid || 0;
                                totalEnd += courseObj.end || 0;
                                totalAtt += s.attendance[courseCode] || 0;
@@ -254,6 +256,8 @@ const FacultyDashboard = () => {
                            const chartData = [
                              { name: 'A1', avg: Number((totalA1/attendees).toFixed(1)) },
                              { name: 'A2', avg: Number((totalA2/attendees).toFixed(1)) },
+                             { name: 'A3', avg: Number((totalA3/attendees).toFixed(1)) },
+                             { name: 'A4', avg: Number((totalA4/attendees).toFixed(1)) },
                              { name: 'Mid', avg: Number((totalMid/attendees).toFixed(1)) },
                              { name: 'End', avg: Number((totalEnd/attendees).toFixed(1)) },
                            ];
