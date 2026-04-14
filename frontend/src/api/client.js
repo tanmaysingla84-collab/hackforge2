@@ -1,5 +1,5 @@
 // Cleaned up BASE_URL: Use environment variable if available, otherwise fallback to Render link
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://hackforge-1-spb5.onrender.com/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://hackforge2.onrender.com/api';
 
 export const apiClient = {
   getStudent: async (id) => {
