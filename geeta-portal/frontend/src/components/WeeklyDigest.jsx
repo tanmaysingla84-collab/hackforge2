@@ -54,12 +54,14 @@ const WeeklyDigest = ({ studentId, studentName, alertsCount }) => {
       )}
 
       {digest && (
-        <div className="animate-fade-in" style={{ marginTop: '20px' }}>
+        <div className="animate-fade-in" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {/* Card to be captured */}
           <div 
             ref={cardRef} 
             style={{ 
-              width: '390px', 
+              width: '100%', 
+              maxWidth: '390px',
+              margin: '0 auto',
               background: 'var(--color-cream)', 
               borderRadius: '16px', 
               boxShadow: 'var(--shadow-md)',
