@@ -42,6 +42,19 @@ router.put("/student/:id/attendance", (req, res) => {
   return res.status(404).json({ message: "Course attendance configuration not found" });
 });
 
+// Update EXACT Daily configuration boolean
+router.put("/student/:id/attendance/daily", (req, res) => {
+  const { courseCode, date, isPresent } = req.body;
+  const student = store.students.find((s) => s.id === req.params.id);
+  if (!student) return res.status(404).json({ message: "Student not found" });
+
+  if (!student.dailyLogs) student.dailyLogs = {};
+  if (!student.dailyLogs[courseCode]) student.dailyLogs[courseCode] = {};
+
+  student.dailyLogs[courseCode][date] = isPresent;
+  return res.json({ success: true, dailyLogs: student.dailyLogs[courseCode] });
+});
+
 router.post("/faculty/login", (req, res) => {
   const { username, password } = req.body;
   const match = store.faculty.find(f => f.username === username && f.password === password);

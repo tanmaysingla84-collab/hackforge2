@@ -81,5 +81,15 @@ export const apiClient = {
     });
     if (!res.ok) throw new Error('Failed to update attendance');
     return res.json();
+  },
+
+  updateDailyAttendance: async (studentId, courseCode, date, isPresent) => {
+    const res = await fetch(`${BASE_URL}/student/${studentId}/attendance/daily`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseCode, date, isPresent })
+    });
+    if (!res.ok) throw new Error('Failed to dump daily log');
+    return res.json();
   }
 };
