@@ -1,4 +1,19 @@
 const seedData = {
+  faculty: [
+    { username: "alokverma", password: "GU@faculty", name: "Dr. Alok Verma" },
+    { username: "neerajsingh", password: "GU@faculty", name: "Prof. Neeraj Singh" },
+    { username: "sunitasharma", password: "GU@faculty", name: "Dr. Sunita Sharma" },
+    { username: "kavitadas", password: "GU@faculty", name: "Mrs. Kavita Das" },
+    { username: "rkkapoor", password: "GU@faculty", name: "Dr. R.K. Kapoor" },
+    { username: "sandeepyadav", password: "GU@faculty", name: "Dr. Sandeep Yadav" },
+    { username: "anilkumar", password: "GU@faculty", name: "Prof. Anil Kumar" },
+    { username: "reenagupta", password: "GU@faculty", name: "Mrs. Reena Gupta" },
+    { username: "vikramsethi", password: "GU@faculty", name: "Dr. Vikram Sethi" },
+    { username: "hsbhatia", password: "GU@faculty", name: "Dr. H.S. Bhatia" },
+    { username: "dineshlal", password: "GU@faculty", name: "Prof. Dinesh Lal" },
+    { username: "rajivnanda", password: "GU@faculty", name: "Mr. Rajiv Nanda" },
+    { username: "shaliniroy", password: "GU@faculty", name: "Dr. Shalini Roy" },
+  ],
   parents: [
     { id: "parent1", username: "parent1", password: "GU@parent1", name: "Arjun Sharma", studentId: "2210001", branch: "B.Tech CSE" },
     { id: "parent2", username: "parent2", password: "GU@parent2", name: "Priya Singh", studentId: "2210002", branch: "B.Tech ECE" },

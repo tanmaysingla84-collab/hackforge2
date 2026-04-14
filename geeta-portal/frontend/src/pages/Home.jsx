@@ -33,7 +33,7 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="animate-slide-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', width: '100%', maxWidth: '800px' }}>
+        <div className="animate-slide-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', width: '100%', maxWidth: '1200px' }}>
           
           {/* Parent Card */}
           <div 
@@ -68,6 +68,24 @@ const Home = () => {
             <p className="text-muted" style={{ flex: 1 }}>Review your grades, track real-time attendance, and manage your weekly schedules cleanly and efficiently.</p>
             <div style={{ display: 'flex', alignItems: 'center', color: '#92400E', fontWeight: 600, marginTop: '24px', gap: '8px' }}>
               View Records <ArrowRight size={18} />
+            </div>
+          </div>
+
+          {/* Faculty Card */}
+          <div 
+            className="card glass-panel" 
+            style={{ cursor: 'pointer', borderTop: '4px solid #10B981', display: 'flex', flexDirection: 'column', height: '100%' }}
+            onClick={() => navigate('/login/faculty')}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ padding: '16px', background: 'var(--color-success-bg)', borderRadius: 'var(--radius-lg)' }}>
+                <Users size={32} color="var(--color-success)" />
+              </div>
+              <h2 style={{ margin: 0, fontSize: '24px' }}>Faculty Portal</h2>
+            </div>
+            <p className="text-muted" style={{ flex: 1 }}>Authenticate to oversee aggregate class performance or securely update targeted student gradebooks and attendance ledgers.</p>
+            <div style={{ display: 'flex', alignItems: 'center', color: '#10B981', fontWeight: 600, marginTop: '24px', gap: '8px' }}>
+              Access Gradebook <ArrowRight size={18} />
             </div>
           </div>
 

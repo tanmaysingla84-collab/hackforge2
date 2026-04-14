@@ -43,5 +43,43 @@ export const apiClient = {
       body: JSON.stringify({ studentId, sender, text })
     });
     return res.json();
+  },
+
+  // --- FACULTY ROUTES ---
+  
+  facultyLogin: async (username, password) => {
+    const res = await fetch(`${BASE_URL}/faculty/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    if (!res.ok) throw new Error('Invalid credentials');
+    return res.json();
+  },
+
+  getAllStudents: async () => {
+    const res = await fetch(`${BASE_URL}/students`);
+    if (!res.ok) throw new Error('Failed to fetch class roster');
+    return res.json();
+  },
+
+  updateMarks: async (studentId, courseCode, payload) => {
+    const res = await fetch(`${BASE_URL}/student/${studentId}/marks`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseCode, payload })
+    });
+    if (!res.ok) throw new Error('Failed to update marks');
+    return res.json();
+  },
+
+  updateAttendance: async (studentId, courseCode, val) => {
+    const res = await fetch(`${BASE_URL}/student/${studentId}/attendance`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseCode, val })
+    });
+    if (!res.ok) throw new Error('Failed to update attendance');
+    return res.json();
   }
 };
