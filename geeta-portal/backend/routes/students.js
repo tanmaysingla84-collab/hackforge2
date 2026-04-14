@@ -62,5 +62,11 @@ router.post("/faculty/login", (req, res) => {
   return res.status(401).json({ message: "Invalid credentials" });
 });
 
+router.get("/faculty", (req, res) => {
+  // Strip passwords securely before transmitting back down the line!
+  const safeConfig = store.faculty.map(f => ({ name: f.name, username: f.username, isAdmin: f.isAdmin }));
+  res.json(safeConfig);
+});
+
 module.exports = router;
 

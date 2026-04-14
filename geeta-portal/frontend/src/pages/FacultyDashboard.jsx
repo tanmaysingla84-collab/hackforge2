@@ -188,9 +188,15 @@ const FacultyDashboard = () => {
             )}
           </div>
           
-          <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
-            End Session
-          </button>
+          {localStorage.getItem('adminMasquerade') === 'true' ? (
+             <button className="btn" onClick={() => navigate('/dashboard/admin')} style={{ background: '#F59E0B', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
+               Return to Admin Terminal
+             </button>
+          ) : (
+            <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
+              End Session
+            </button>
+          )}
         </div>
 
         {activeBatches.length > 0 && (
@@ -404,7 +410,13 @@ const FacultyDashboard = () => {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#C2410C', fontWeight: 600, fontSize: '13px' }}>
                                       <CalendarCheck size={16} /> Mark Specifically For Any Day:
                                     </div>
-                                    <input type="date" value={dailyDate} onChange={e => setDailyDate(e.target.value)} style={{ padding: '8px', border: '1px solid #FED7AA', borderRadius: '4px', background: 'white' }} />
+                                    <input 
+                                      type="date" 
+                                      max={new Date().toISOString().split('T')[0]}
+                                      value={dailyDate} 
+                                      onChange={e => setDailyDate(e.target.value)} 
+                                      style={{ padding: '8px', border: '1px solid #FED7AA', borderRadius: '4px', background: 'white' }} 
+                                    />
                                     <div style={{ display: 'flex', gap: '8px' }}>
                                       <button onClick={() => markDailyLog(ac.code, true)} style={{ flex: 1, background: '#22C55E', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', fontWeight: 600, cursor: 'pointer' }}>✓ Present</button>
                                       <button onClick={() => markDailyLog(ac.code, false)} style={{ flex: 1, background: '#EF4444', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', fontWeight: 600, cursor: 'pointer' }}>✗ Absent</button>

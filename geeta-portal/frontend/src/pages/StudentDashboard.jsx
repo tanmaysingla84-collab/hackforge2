@@ -70,10 +70,27 @@ const StudentDashboard = () => {
 
         {/* Student Mini Profile */}
         <div className="card animate-fade-in stagger-1" style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', justifyContent: 'space-between', borderTop: '4px solid var(--color-gold)' }}>
-          <div>
-            <h2 className="text-maroon" style={{ margin: '0 0 8px 0' }}>Welcome back, {student.name}</h2>
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h2 className="text-maroon" style={{ margin: '0 0 8px 0' }}>Welcome back, {student.name}</h2>
+              <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-light)', fontSize: '14px' }}>
+                <span><strong>Roll No:</strong> {student.rollNo}</span>
+                <span><strong>Branch:</strong> {student.branch}</span>
+                <span><strong>Sem:</strong> {student.semester}</span>
+                <span><strong>Sec:</strong> {student.section}</span>
+              </div>
+            </div>
+            {localStorage.getItem('adminMasquerade') === 'true' ? (
+               <button className="btn" onClick={() => navigate('/dashboard/admin')} style={{ background: '#F59E0B', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
+                 Return to Admin Terminal
+               </button>
+            ) : (
+               <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
+                 End Session
+               </button>
+            )}
+          </div>
             <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-light)', fontSize: '14px' }}>
-              <span><strong>Roll No:</strong> {student.rollNo}</span>
               <span><strong>Branch:</strong> {student.branch}</span>
               <span><strong>Sem:</strong> {student.semester}</span>
               <span><strong>Sec:</strong> {student.section}</span>

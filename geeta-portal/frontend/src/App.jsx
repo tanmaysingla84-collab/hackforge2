@@ -7,6 +7,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import MessagesPage from './pages/MessagesPage';
 import LoginFaculty from './pages/LoginFaculty';
 import FacultyDashboard from './pages/FacultyDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard/parent" element={<ParentDashboard />} />
         <Route path="/dashboard/student" element={<StudentDashboard />} />
         <Route path="/dashboard/faculty" element={<FacultyDashboard />} />
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
         <Route path="/messages" element={<MessagesPage />} />
       </Routes>
     </BrowserRouter>

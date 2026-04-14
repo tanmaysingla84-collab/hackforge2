@@ -18,8 +18,16 @@ const LoginFaculty = () => {
       const match = await apiClient.facultyLogin(username, password);
       
       if (match) {
+        if (match.isAdmin) {
+           localStorage.setItem('adminMasquerade', 'true');
+           localStorage.setItem('role', 'admin');
+           navigate('/dashboard/admin');
+           return;
+        }
+
         localStorage.setItem('facultyName', match.name);
         localStorage.setItem('role', 'faculty');
+        localStorage.removeItem('adminMasquerade');
         navigate('/dashboard/faculty');
       }
     } catch (err) {

@@ -1,5 +1,6 @@
 const seedData = {
   faculty: [
+    { username: "admin", password: "GU@admin", name: "System Administrator", isAdmin: true },
     { username: "alokverma", password: "GU@faculty", name: "Dr. Alok Verma" },
     { username: "neerajsingh", password: "GU@faculty", name: "Prof. Neeraj Singh" },
     { username: "sunitasharma", password: "GU@faculty", name: "Dr. Sunita Sharma" },

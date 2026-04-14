@@ -57,6 +57,12 @@ export const apiClient = {
     return res.json();
   },
 
+  getAllFaculty: async () => {
+    const res = await fetch(`${BASE_URL}/faculty`);
+    if (!res.ok) throw new Error('Failed to fetch faculty directory');
+    return res.json();
+  },
+
   getAllStudents: async () => {
     const res = await fetch(`${BASE_URL}/students`);
     if (!res.ok) throw new Error('Failed to fetch class roster');
