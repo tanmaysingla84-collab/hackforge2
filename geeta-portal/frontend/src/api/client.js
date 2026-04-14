@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://hackforge-d9f3.onrender.com/api';
 
 export const apiClient = {
   getStudent: async (id) => {
