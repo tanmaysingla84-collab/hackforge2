@@ -41,7 +41,7 @@ const WeeklyDigest = ({ studentId, studentName, alertsCount }) => {
       </p>
 
       {!digest && !loading && (
-        <button onClick={handleGenerate} className="btn btn-secondary">
+        <button onClick={handleGenerate} className="btn btn-secondary" style={{ color: 'white' }}>
           Generate Weekly Digest
         </button>
       )}
@@ -69,7 +69,7 @@ const WeeklyDigest = ({ studentId, studentName, alertsCount }) => {
           >
             {/* Header */}
             <div style={{ background: 'var(--color-maroon)', padding: '20px', color: 'var(--color-gold)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="/geeta_logo.png" alt="Logo" width="48" height="48" style={{ objectFit: 'contain', marginBottom: '8px' }} />
+              <img src="/gu_logo.png" alt="Logo" width="48" height="48" style={{ objectFit: 'contain', marginBottom: '8px' }} />
               <div style={{ fontWeight: 700, fontSize: '18px', letterSpacing: '1px' }}>GEETA UNIVERSITY</div>
               <div style={{ fontSize: '12px', opacity: 0.9 }}>Weekly Academic Digest</div>
             </div>

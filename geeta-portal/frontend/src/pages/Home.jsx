@@ -6,12 +6,28 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-cream)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+      {/* Global Background Image Layer */}
+      <div style={{ 
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+        backgroundImage: 'url(/gu_land.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        zIndex: -2 
+      }} />
+      {/* Light Frosted Overlay for Text Legibility */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+        background: 'linear-gradient(135deg, rgba(249, 245, 240, 0.95) 0%, rgba(249, 245, 240, 0.6) 100%)',
+        backdropFilter: 'blur(2px)',
+        zIndex: -1
+      }} />
       {/* Hero Section */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
         <div className="animate-slide-down" style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <img src="/geeta_logo.png" alt="Geeta University Logo" width="80" height="80" style={{ objectFit: 'contain', marginBottom: '16px' }} />
-          <h1 style={{ fontSize: '36px', color: 'var(--color-maroon)', marginBottom: '8px' }}>Geeta University Hub</h1>
+          <img src="/gu_logo.png" alt="Geeta University Logo" width="140" height="140" style={{ objectFit: 'contain', marginBottom: '16px' }} />
+          <h1 style={{ fontSize: '36px', color: 'var(--color-maroon)', marginBottom: '8px' }}>Geeta University</h1>
           <p className="text-muted" style={{ fontSize: '18px', maxWidth: '600px', margin: '0 auto' }}>
             A unified connectivity platform for students and parents. Please select your portal to continue.
           </p>
@@ -21,7 +37,7 @@ const Home = () => {
           
           {/* Parent Card */}
           <div 
-            className="card" 
+            className="card glass-panel" 
             style={{ cursor: 'pointer', borderTop: '4px solid var(--color-maroon)', display: 'flex', flexDirection: 'column', height: '100%' }}
             onClick={() => navigate('/login/parent')}
           >
@@ -39,7 +55,7 @@ const Home = () => {
 
           {/* Student Card */}
           <div 
-            className="card" 
+            className="card glass-panel" 
             style={{ cursor: 'pointer', borderTop: '4px solid var(--color-gold)', display: 'flex', flexDirection: 'column', height: '100%' }}
             onClick={() => navigate('/login/student')}
           >

@@ -13,11 +13,11 @@ const seedData = {
       semester: 3,
       section: "A",
       theoryCourses: [
-        { code: "CS301", name: "Data Structures", a1: 21, a2: 18, mid: 46, a3: 22, a4: 20, end: 82 },
-        { code: "CS302", name: "Computer Organization", a1: 17, a2: 20, mid: 41, a3: 19, a4: 16, end: 77 },
-        { code: "CS303", name: "Discrete Mathematics", a1: 22, a2: 23, mid: 52, a3: 21, a4: 24, end: 88 },
-        { code: "CS304", name: "Object Oriented Programming", a1: 19, a2: 21, mid: 48, a3: 23, a4: 22, end: 85 },
-        { code: "MA301", name: "Engineering Mathematics III", a1: 15, a2: 17, mid: 38, a3: 18, a4: 15, end: 70 }
+        { code: "CS301", name: "Data Structures", a1: 21, a2: 18, mid: 46, a3: 22, a4: 20, end: 82, teacherName: "Dr. Alok Verma", teacherPhone: "+91-9876543210" },
+        { code: "CS302", name: "Computer Organization", a1: 17, a2: 20, mid: 41, a3: 19, a4: 16, end: 77, teacherName: "Prof. Neeraj Singh", teacherPhone: "+91-9876543211" },
+        { code: "CS303", name: "Discrete Mathematics", a1: 22, a2: 23, mid: 52, a3: 21, a4: 24, end: 88, teacherName: "Dr. Sunita Sharma", teacherPhone: "+91-9876543212" },
+        { code: "CS304", name: "Object Oriented Programming", a1: 19, a2: 21, mid: 48, a3: 23, a4: 22, end: 85, teacherName: "Mrs. Kavita Das", teacherPhone: "+91-9876543213" },
+        { code: "MA301", name: "Engineering Mathematics III", a1: 15, a2: 17, mid: 38, a3: 18, a4: 15, end: 70, teacherName: "Dr. R.K. Kapoor", teacherPhone: "+91-9876543214" }
       ],
       labCourses: [
         { code: "CS311", name: "Data Structures Lab", labA1: 22, labA2: 23 },
@@ -41,11 +41,11 @@ const seedData = {
       semester: 3,
       section: "B",
       theoryCourses: [
-        { code: "EC301", name: "Analog Electronics", a1: 20, a2: 22, mid: 49, a3: 23, a4: 21, end: 85 },
-        { code: "EC302", name: "Signals & Systems", a1: 16, a2: 14, mid: 36, a3: 17, a4: 13, end: 68 },
-        { code: "EC303", name: "Digital Electronics", a1: 23, a2: 24, mid: 54, a3: 22, a4: 24, end: 92 },
-        { code: "EC304", name: "Electromagnetic Theory", a1: 18, a2: 19, mid: 44, a3: 20, a4: 18, end: 78 },
-        { code: "MA301", name: "Engineering Mathematics III", a1: 21, a2: 20, mid: 47, a3: 22, a4: 21, end: 81 }
+        { code: "EC301", name: "Analog Electronics", a1: 20, a2: 22, mid: 49, a3: 23, a4: 21, end: 85, teacherName: "Dr. Sandeep Yadav", teacherPhone: "+91-8765432109" },
+        { code: "EC302", name: "Signals & Systems", a1: 16, a2: 14, mid: 36, a3: 17, a4: 13, end: 68, teacherName: "Prof. Anil Kumar", teacherPhone: "+91-8765432110" },
+        { code: "EC303", name: "Digital Electronics", a1: 23, a2: 24, mid: 54, a3: 22, a4: 24, end: 92, teacherName: "Mrs. Reena Gupta", teacherPhone: "+91-8765432111" },
+        { code: "EC304", name: "Electromagnetic Theory", a1: 18, a2: 19, mid: 44, a3: 20, a4: 18, end: 78, teacherName: "Dr. Vikram Sethi", teacherPhone: "+91-8765432112" },
+        { code: "MA301", name: "Engineering Mathematics III", a1: 21, a2: 20, mid: 47, a3: 22, a4: 21, end: 81, teacherName: "Dr. R.K. Kapoor", teacherPhone: "+91-9876543214" }
       ],
       labCourses: [
         { code: "EC311", name: "Analog Electronics Lab", labA1: 21, labA2: 22 },
@@ -69,11 +69,11 @@ const seedData = {
       semester: 3,
       section: "A",
       theoryCourses: [
-        { code: "ME301", name: "Thermodynamics", a1: 14, a2: 16, mid: 37, a3: 15, a4: 12, end: 62 },
-        { code: "ME302", name: "Fluid Mechanics", a1: 19, a2: 18, mid: 43, a3: 20, a4: 19, end: 76 },
-        { code: "ME303", name: "Manufacturing Processes", a1: 22, a2: 21, mid: 50, a3: 23, a4: 22, end: 89 },
-        { code: "ME304", name: "Engineering Materials", a1: 17, a2: 19, mid: 41, a3: 18, a4: 16, end: 74 },
-        { code: "MA301", name: "Engineering Mathematics III", a1: 13, a2: 15, mid: 35, a3: 14, a4: 11, end: 55 }
+        { code: "ME301", name: "Thermodynamics", a1: 14, a2: 16, mid: 37, a3: 15, a4: 12, end: 62, teacherName: "Dr. H.S. Bhatia", teacherPhone: "+91-7654321098" },
+        { code: "ME302", name: "Fluid Mechanics", a1: 19, a2: 18, mid: 43, a3: 20, a4: 19, end: 76, teacherName: "Prof. Dinesh Lal", teacherPhone: "+91-7654321099" },
+        { code: "ME303", name: "Manufacturing Processes", a1: 22, a2: 21, mid: 50, a3: 23, a4: 22, end: 89, teacherName: "Mr. Rajiv Nanda", teacherPhone: "+91-7654321100" },
+        { code: "ME304", name: "Engineering Materials", a1: 17, a2: 19, mid: 41, a3: 18, a4: 16, end: 74, teacherName: "Dr. Shalini Roy", teacherPhone: "+91-7654321101" },
+        { code: "MA301", name: "Engineering Mathematics III", a1: 13, a2: 15, mid: 35, a3: 14, a4: 11, end: 55, teacherName: "Dr. R.K. Kapoor", teacherPhone: "+91-9876543214" }
       ],
       labCourses: [
         { code: "ME311", name: "Fluid Mechanics Lab", labA1: 20, labA2: 21 },

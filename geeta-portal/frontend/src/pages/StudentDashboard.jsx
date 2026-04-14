@@ -69,7 +69,7 @@ const StudentDashboard = () => {
         <SmartAlertBanner alerts={alerts} />
 
         {/* Student Mini Profile */}
-        <div className="card animate-fade-in" style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', justifyContent: 'space-between', borderTop: '4px solid var(--color-gold)' }}>
+        <div className="card animate-fade-in stagger-1" style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', justifyContent: 'space-between', borderTop: '4px solid var(--color-gold)' }}>
           <div>
             <h2 className="text-maroon" style={{ margin: '0 0 8px 0' }}>Welcome back, {student.name}</h2>
             <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-light)', fontSize: '14px' }}>
@@ -82,7 +82,7 @@ const StudentDashboard = () => {
           
           <div style={{ 
             background: 'var(--color-gold)', 
-            color: 'var(--color-maroon)', 
+            color: 'var(--color-cream)', 
             padding: '12px 24px', 
             borderRadius: 'var(--radius-md)',
             fontWeight: 700,
@@ -93,23 +93,25 @@ const StudentDashboard = () => {
           </div>
         </div>
 
-        {/* Main Grid Layout */}
-        <div className="dashboard-grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'minmax(0, 7fr) minmax(0, 4fr)', 
+        {/* Main Monolithic Column Layout */}
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
           gap: '24px',
-          alignItems: 'start'
         }}>
-          {/* Left Column (Academic Visuals) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <MarksTable theoryCourses={student.theoryCourses} labCourses={student.labCourses} />
+          {/* Top Level Dash Layer */}
+          <div className="animate-fade-in stagger-2" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '24px' }}>
+            <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
             <TrendChart courses={student.theoryCourses} />
-            <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} />
           </div>
 
-          {/* Right Column (Insights & Comms) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
+          <div className="animate-fade-in stagger-3">
+             <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} />
+          </div>
+
+          {/* Core Table Layer */}
+          <div className="animate-fade-in stagger-4">
+             <MarksTable theoryCourses={student.theoryCourses} labCourses={student.labCourses} />
           </div>
         </div>
       </main>

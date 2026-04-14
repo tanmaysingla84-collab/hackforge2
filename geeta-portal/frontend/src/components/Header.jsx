@@ -26,11 +26,13 @@ const Header = ({ studentName, role }) => {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         {/* Real Logo */}
-        <img src="/geeta_logo.png" alt="Geeta University Logo" width="40" height="40" style={{ objectFit: 'contain' }} />
+        <img src="/gu_logo.png" alt="Geeta University Logo" width="65" height="65" style={{ objectFit: 'contain' }} />
         
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <h1 style={{ margin: 0, fontSize: '20px', color: 'var(--color-maroon)', lineHeight: 1.2 }}>Geeta University</h1>
-          <span style={{ fontSize: '13px', color: 'var(--color-text-light)' }}>Parent-Student Portal</span>
+          <span style={{ fontSize: '13px', color: 'var(--color-text-light)', textTransform: 'capitalize' }}>
+            {role ? `${role} Portal` : 'Parent-Student Portal'}
+          </span>
         </div>
       </div>
 

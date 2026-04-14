@@ -9,6 +9,8 @@ import AttendanceCards from '../components/AttendanceCards';
 import AIInsightPanel from '../components/AIInsightPanel';
 import WeeklyDigest from '../components/WeeklyDigest';
 import Messages from '../components/Messages';
+import FacultyDirectory from '../components/FacultyDirectory';
+import ParentControls from '../components/ParentControls';
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -71,7 +73,7 @@ const ParentDashboard = () => {
         <SmartAlertBanner alerts={alerts} />
 
         {/* Student Mini Profile */}
-        <div className="card animate-fade-in" style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="card animate-fade-in stagger-1" style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <h2 className="text-maroon" style={{ margin: '0 0 8px 0' }}>{student.name}</h2>
             <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-light)', fontSize: '14px' }}>
@@ -103,18 +105,20 @@ const ParentDashboard = () => {
           alignItems: 'start'
         }}>
           {/* Left Column (Academic Visuals) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="animate-fade-in stagger-2" style={{ display: 'flex', flexDirection: 'column' }}>
             <MarksTable theoryCourses={student.theoryCourses} labCourses={student.labCourses} />
             <TrendChart courses={student.theoryCourses} />
-            <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} />
+            <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} />
           </div>
 
           {/* Right Column (Insights & Comms) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="animate-fade-in stagger-3" style={{ display: 'flex', flexDirection: 'column' }}>
             {role === 'parent' && (
               <AIInsightPanel studentId={student.id} studentName={student.name} />
             )}
             
+            <FacultyDirectory theoryCourses={student.theoryCourses} />
+            <ParentControls />
             <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
             
             <Messages studentId={student.id} role={role} />

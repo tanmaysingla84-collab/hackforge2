@@ -5,7 +5,7 @@ import { Send } from 'lucide-react';
 const Messages = ({ studentId, role }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const endRef = useRef(null);
+  const listRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -28,7 +28,9 @@ const Messages = ({ studentId, role }) => {
   }, [studentId]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
   }, [messages]);
 
   const handleSend = async (e) => {
@@ -52,7 +54,7 @@ const Messages = ({ studentId, role }) => {
         <p className="text-muted" style={{ margin: 0, fontSize: '13px' }}>Communication thread with Faculty</p>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', backgroundColor: '#fdfbfa' }}>
+      <div ref={listRef} style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', backgroundColor: '#fdfbfa' }}>
         {messages.length === 0 ? (
           <div style={{ textAlign: 'center', color: 'var(--color-text-light)', marginTop: '40px', fontSize: '14px' }}>
             No messages yet.
@@ -84,7 +86,6 @@ const Messages = ({ studentId, role }) => {
             );
           })
         )}
-        <div ref={endRef} />
       </div>
 
       <form onSubmit={handleSend} style={{ padding: '16px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '12px', background: 'white' }}>
