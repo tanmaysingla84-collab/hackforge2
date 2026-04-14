@@ -62,19 +62,29 @@ const generateLectureData = (percentage) => {
     currentPresents--;
   }
 
-  // Second pass: map strict Lecture numbers for duplicate days
-  const dateCounts = {};
+  // Second pass: mock authentic timetable slots (Lecture 1 strictly through 8)
+  const usedSlots = {};
   history.forEach(h => {
-    dateCounts[h.rawDate] = (dateCounts[h.rawDate] || 0) + 1;
+    if (!usedSlots[h.rawDate]) usedSlots[h.rawDate] = [];
+    
+    let slotNum;
+    do {
+      slotNum = Math.floor(Math.random() * 8) + 1; // Generates 1 through 8
+    } while (usedSlots[h.rawDate].includes(slotNum));
+    
+    usedSlots[h.rawDate].push(slotNum);
+    h.slotAssignment = slotNum;
+    h.formattedDate = `${h.rawDate} (Lecture ${slotNum})`;
   });
 
-  const dailyIterator = {};
-  history.forEach(h => {
-    dailyIterator[h.rawDate] = (dailyIterator[h.rawDate] || 0) + 1;
-    
-    // If the day had more than 1 lecture across the cycle, explicit label "Lec 1", "Lec 2". 
-    // Always labeling 'Lecture 1' makes it look highly authentic anyway.
-    h.formattedDate = `${h.rawDate} (Lecture ${dailyIterator[h.rawDate]})`;
+  // Finally, physically lock the timeline backwards so they map dynamically in true chronological descent!
+  history.sort((a, b) => {
+    const timeA = new Date(a.rawDate).getTime();
+    const timeB = new Date(b.rawDate).getTime();
+    if (timeA === timeB) {
+      return b.slotAssignment - a.slotAssignment; // Higher lecture slots map above lower ones in backward feeds
+    }
+    return timeB - timeA;
   });
 
   return history;
