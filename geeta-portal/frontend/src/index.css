@@ -41,6 +41,11 @@
   font-family: 'Inter', sans-serif;
 }
 
+html, body, #root {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background-color: var(--color-cream);
   color: var(--color-text);

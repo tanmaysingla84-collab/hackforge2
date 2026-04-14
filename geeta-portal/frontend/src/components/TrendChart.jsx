@@ -22,11 +22,11 @@ const TrendChart = ({ courses }) => {
   const colors = ['#8B1A1A', '#F5A623', '#3B82F6', '#10B981', '#8B5CF6'];
 
   return (
-    <div className="card" style={{ marginBottom: '24px', height: '400px', width: '100%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+    <div className="card" style={{ marginBottom: '24px', width: '100%', minWidth: 0 }}>
       <h3 style={{ marginBottom: '16px' }}>Performance Trend (Absolute Marks)</h3>
-      <div style={{ flex: 1, width: '100%', minHeight: 0 }}>
-        <ResponsiveContainer width="99%" height="100%">
-          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+      <div style={{ width: '100%', minHeight: '300px' }}>
+        <ResponsiveContainer width="99%" height={350}>
+          <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
           <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#6B7280" />
           <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} stroke="#6B7280" />
