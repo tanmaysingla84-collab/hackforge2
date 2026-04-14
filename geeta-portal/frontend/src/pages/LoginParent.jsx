@@ -62,9 +62,11 @@ const LoginParent = () => {
             </button>
           </form>
 
-          <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px' }}>
+          <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
             <span className="text-muted">Student logging in? </span>
-            <a href="/login/student" className="text-maroon" style={{ cursor: 'pointer', fontWeight: 600, textDecoration: 'none' }}>Go to Student Portal</a>
+            <button onClick={() => navigate('/login/student')} className="btn" style={{ padding: '6px 16px', background: 'transparent', color: 'var(--color-maroon)', border: '1px solid var(--color-maroon)' }}>
+              Switch to Student Portal
+            </button>
           </div>
         </div>
       </div>

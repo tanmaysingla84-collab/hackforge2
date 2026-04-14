@@ -1,8 +1,10 @@
+// Cleaned up BASE_URL: Use environment variable if available, otherwise fallback to Render link
 const BASE_URL = import.meta.env.VITE_API_URL || 'https://hackforge-d9f3.onrender.com/api';
 
 export const apiClient = {
   getStudent: async (id) => {
     const res = await fetch(`${BASE_URL}/student/${id}`);
+    if (!res.ok) throw new Error('Student not found'); // Added basic error handling
     return res.json();
   },
 
