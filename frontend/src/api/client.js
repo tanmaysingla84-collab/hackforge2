@@ -6,7 +6,7 @@ export const apiClient = {
     const res = await fetch(`${BASE_URL}/student/${id}`); // Change {10} to {id}
     if (!res.ok) throw new Error('Student not found');
     return res.json();
-},
+  },
   getAlerts: async (id) => {
     const res = await fetch(`${BASE_URL}/student/${id}/alerts`);
     return res.json();
