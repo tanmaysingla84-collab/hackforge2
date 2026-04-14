@@ -80,43 +80,34 @@ const StudentDashboard = () => {
                 <span><strong>Sec:</strong> {student.section}</span>
               </div>
             </div>
-            {localStorage.getItem('adminMasquerade') === 'true' ? (
-               <button className="btn" onClick={() => navigate('/dashboard/admin')} style={{ background: '#F59E0B', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
-                 Return to Admin Terminal
-               </button>
-            ) : (
-               <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
-                 End Session
-               </button>
-            )}
-          </div>
-            <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-light)', fontSize: '14px' }}>
-              <span><strong>Branch:</strong> {student.branch}</span>
-              <span><strong>Sem:</strong> {student.semester}</span>
-              <span><strong>Sec:</strong> {student.section}</span>
+            
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              {localStorage.getItem('adminMasquerade') === 'true' ? (
+                <button className="btn" onClick={() => navigate('/dashboard/admin')} style={{ background: '#F59E0B', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
+                  Return to Admin Terminal
+                </button>
+              ) : (
+                <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
+                  End Session
+                </button>
+              )}
+
+              <div style={{ 
+                background: 'var(--color-gold)', 
+                color: 'var(--color-cream)', 
+                padding: '8px 16px', 
+                borderRadius: 'var(--radius-md)',
+                fontWeight: 700,
+                textAlign: 'center'
+              }}>
+                Standing: Good
+              </div>
             </div>
-          </div>
-          
-          <div style={{ 
-            background: 'var(--color-gold)', 
-            color: 'var(--color-cream)', 
-            padding: '12px 24px', 
-            borderRadius: 'var(--radius-md)',
-            fontWeight: 700,
-            textAlign: 'center'
-          }}>
-            Overall Standing
-            <div style={{ fontSize: '24px', marginTop: '4px' }}>Good</div>
           </div>
         </div>
 
-        {/* Main Monolithic Column Layout */}
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '24px',
-        }}>
-          {/* Top Level Dash Layer */}
+        {/* Main Content Layout */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div className="animate-fade-in stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <TrendChart courses={student.theoryCourses} />
             <WeeklyDigest studentId={student.id} studentName={student.name} alertsCount={alerts.length} />
@@ -126,7 +117,6 @@ const StudentDashboard = () => {
              <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} />
           </div>
 
-          {/* Core Table Layer */}
           <div className="animate-fade-in stagger-4">
              <MarksTable theoryCourses={student.theoryCourses} labCourses={student.labCourses} />
           </div>
