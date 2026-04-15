@@ -1,7 +1,7 @@
 const express = require("express");
 const { z } = require("zod");
 const { Anthropic } = require("@anthropic-ai/sdk");
-const { store } = require("../data/seedData");
+const Student = require("../models/Student");
 
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.post("/insights", async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: "Invalid request", issues: parsed.error.issues });
 
-  const student = store.students.find((s) => s.id === parsed.data.studentId);
+  const student = await Student.findOne({ id: parsed.data.studentId });
   if (!student) return res.status(404).json({ message: "Student not found" });
 
   const anthropic = makeAnthropic();
@@ -92,7 +92,7 @@ router.post("/digest", async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: "Invalid request", issues: parsed.error.issues });
 
-  const student = store.students.find((s) => s.id === parsed.data.studentId);
+  const student = await Student.findOne({ id: parsed.data.studentId });
   if (!student) return res.status(404).json({ message: "Student not found" });
 
   const anthropic = makeAnthropic();

@@ -1,72 +1,103 @@
 const express = require("express");
-const { store } = require("../data/seedData");
+const Student = require("../models/Student");
+const Faculty = require("../models/Faculty");
 
 const router = express.Router();
 
-router.get("/student/:id", (req, res) => {
-  const student = store.students.find((s) => s.id === req.params.id);
-  if (!student) return res.status(404).json({ message: "Student not found" });
-  res.json(student);
+router.get("/student/:id", async (req, res) => {
+  try {
+    const student = await Student.findOne({ id: req.params.id });
+    if (!student) return res.status(404).json({ message: "Student not found" });
+    res.json(student);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 // Admin / Faculty Dashboard hooks: Get overall class view
-router.get("/students", (req, res) => {
-  res.json(store.students);
+router.get("/students", async (req, res) => {
+  try {
+    const students = await Student.find({});
+    res.json(students);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 // Update particular subject marks
-router.put("/student/:id/marks", (req, res) => {
+router.put("/student/:id/marks", async (req, res) => {
   const { courseCode, payload } = req.body;
-  const student = store.students.find((s) => s.id === req.params.id);
-  if (!student) return res.status(404).json({ message: "Student not found" });
+  try {
+    const student = await Student.findOne({ id: req.params.id });
+    if (!student) return res.status(404).json({ message: "Student not found" });
 
-  const targetCourse = student.theoryCourses.find(c => c.code === courseCode);
-  if (targetCourse) {
-    // safely assign properties (a1, a2, mid, etc) 
-    Object.assign(targetCourse, payload);
-    return res.json({ success: true, updatedCourse: targetCourse });
+    const targetCourse = student.theoryCourses.find(c => c.code === courseCode);
+    if (targetCourse) {
+      Object.assign(targetCourse, payload);
+      await student.save();
+      return res.json({ success: true, updatedCourse: targetCourse });
+    }
+    return res.status(404).json({ message: "Course not found" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-  return res.status(404).json({ message: "Course not found" });
 });
 
 // Update particular subject attendance
-router.put("/student/:id/attendance", (req, res) => {
+router.put("/student/:id/attendance", async (req, res) => {
   const { courseCode, val } = req.body;
-  const student = store.students.find((s) => s.id === req.params.id);
-  if (!student) return res.status(404).json({ message: "Student not found" });
+  try {
+    const student = await Student.findOne({ id: req.params.id });
+    if (!student) return res.status(404).json({ message: "Student not found" });
 
-  if (student.attendance && typeof student.attendance[courseCode] !== 'undefined') {
-    student.attendance[courseCode] = parseInt(val, 10);
-    return res.json({ success: true, newAttendance: student.attendance[courseCode] });
+    if (student.attendance && student.attendance.has(courseCode)) {
+      student.attendance.set(courseCode, parseInt(val, 10));
+      await student.save();
+      return res.json({ success: true, newAttendance: student.attendance.get(courseCode) });
+    }
+    return res.status(404).json({ message: "Course attendance configuration not found" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-  return res.status(404).json({ message: "Course attendance configuration not found" });
 });
 
 // Update EXACT Daily configuration boolean
-router.put("/student/:id/attendance/daily", (req, res) => {
+router.put("/student/:id/attendance/daily", async (req, res) => {
   const { courseCode, date, isPresent } = req.body;
-  const student = store.students.find((s) => s.id === req.params.id);
-  if (!student) return res.status(404).json({ message: "Student not found" });
+  try {
+    const student = await Student.findOne({ id: req.params.id });
+    if (!student) return res.status(404).json({ message: "Student not found" });
 
-  if (!student.dailyLogs) student.dailyLogs = {};
-  if (!student.dailyLogs[courseCode]) student.dailyLogs[courseCode] = {};
+    if (!student.dailyLogs) student.dailyLogs = new Map();
+    if (!student.dailyLogs.has(courseCode)) student.dailyLogs.set(courseCode, new Map());
 
-  student.dailyLogs[courseCode][date] = isPresent;
-  return res.json({ success: true, dailyLogs: student.dailyLogs[courseCode] });
+    student.dailyLogs.get(courseCode).set(date, isPresent);
+    await student.save();
+    return res.json({ success: true, dailyLogs: Object.fromEntries(student.dailyLogs.get(courseCode)) });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
-router.post("/faculty/login", (req, res) => {
+router.post("/faculty/login", async (req, res) => {
   const { username, password } = req.body;
-  const match = store.faculty.find(f => f.username === username && f.password === password);
-  if (match) return res.json(match);
-  return res.status(401).json({ message: "Invalid credentials" });
+  try {
+    const match = await Faculty.findOne({ username, password });
+    if (match) return res.json(match);
+    return res.status(401).json({ message: "Invalid credentials" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
-router.get("/faculty", (req, res) => {
-  // Strip passwords securely before transmitting back down the line!
-  const safeConfig = store.faculty.map(f => ({ name: f.name, username: f.username, isAdmin: f.isAdmin }));
-  res.json(safeConfig);
+router.get("/faculty", async (req, res) => {
+  try {
+    const faculty = await Faculty.find({});
+    const safeConfig = faculty.map(f => ({ name: f.name, username: f.username, isAdmin: f.isAdmin }));
+    res.json(safeConfig);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 module.exports = router;
-
