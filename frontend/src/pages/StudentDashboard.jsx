@@ -82,15 +82,9 @@ const StudentDashboard = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              {localStorage.getItem('adminMasquerade') === 'true' ? (
-                <button className="btn" onClick={() => navigate('/dashboard/admin')} style={{ background: '#F59E0B', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
-                  Return to Admin Terminal
-                </button>
-              ) : (
-                <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
-                  End Session
-                </button>
-              )}
+              <button className="btn btn-secondary" onClick={() => { localStorage.clear(); navigate('/'); }}>
+                End Session
+              </button>
 
               <div style={{ 
                 background: 'var(--color-gold)', 
@@ -114,7 +108,7 @@ const StudentDashboard = () => {
           </div>
 
           <div className="animate-fade-in stagger-3">
-             <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} />
+             <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} dailyLogs={student.dailyLogs} />
           </div>
 
           <div className="animate-fade-in stagger-4">

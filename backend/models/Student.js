@@ -20,6 +20,13 @@ const labCourseSchema = new mongoose.Schema({
   labA2: Number
 }, { _id: false });
 
+const attendanceLogSchema = new mongoose.Schema({
+  date: String, 
+  slotNumber: Number,
+  courseCode: String,
+  status: { type: String, enum: ['Present', 'Absent'] }
+}, { _id: false });
+
 const studentSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true },
@@ -29,18 +36,9 @@ const studentSchema = new mongoose.Schema({
   section: { type: String, required: true },
   theoryCourses: [theoryCourseSchema],
   labCourses: [labCourseSchema],
-  attendance: {
-    type: Map,
-    of: Number,
-    default: {}
-  },
-  dailyLogs: {
-    type: Map,
-    of: {
-      type: Map,
-      of: Boolean
-    },
-    default: {}
+  attendanceLogs: {
+    type: [attendanceLogSchema],
+    default: []
   }
 });
 

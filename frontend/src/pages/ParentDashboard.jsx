@@ -108,7 +108,7 @@ const ParentDashboard = () => {
           <div className="animate-fade-in stagger-2" style={{ display: 'flex', flexDirection: 'column' }}>
             <MarksTable theoryCourses={student.theoryCourses} labCourses={student.labCourses} />
             <TrendChart courses={student.theoryCourses} />
-            <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} />
+            <AttendanceCards theoryCourses={student.theoryCourses} labCourses={student.labCourses} attendance={student.attendance} studentName={student.name} dailyLogs={student.dailyLogs} />
           </div>
 
           {/* Right Column (Insights & Comms) */}
